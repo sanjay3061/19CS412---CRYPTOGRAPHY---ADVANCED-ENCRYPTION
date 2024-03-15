@@ -21,58 +21,58 @@ STEP-7: Decryption is done as cipherdmod n.
 
 ## PROGRAM:
 ```python
-from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives import padding
+import random
 
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
 
-def pad(text):
-    padder = padding.PKCS7(64).padder()
-    padded_text = padder.update(text)
-    return padded_text + padder.finalize()
+def mod_inverse(a, m):
+    m0, x0, x1 = m, 0, 1
+    while a > 1:
+        q = a // m
+        m, a = a % m, m
+        x0, x1 = x1 - q * x0, x0
+    return x1 + m0 if x1 < 0 else x1
 
+def generate_keypair(p, q):
+    n = p * q
+    phi = (p - 1) * (q - 1)
+    e = random.randrange(1, phi)
+    while gcd(e, phi) != 1:
+        e = random.randrange(1, phi)
+    d = mod_inverse(e, phi)
+    return ((e, n), (d, n))
 
-def unpad(text):
-    unpadder = padding.PKCS7(64).unpadder()
-    unpadded_text = unpadder.update(text)
-    return unpadded_text + unpadder.finalize()
+def encrypt(public_key, plaintext):
+    e, n = public_key
+    cipher = [pow(ord(char), e, n) for char in plaintext]
+    return cipher
 
-# key
-key = b"abcdefgh"
+def decrypt(private_key, ciphertext):
+    d, n = private_key
+    plain = [chr(pow(char, d, n)) for char in ciphertext]
+    return ''.join(plain)
 
+def main():
+    p = 61
+    q = 53
+    public_key, private_key = generate_keypair(p, q)
+    message = "Sanjay"
+    encrypted_message = encrypt(public_key, message)
+    decrypted_message = decrypt(private_key, encrypted_message)
+    print("Original message:", message)
+    print("Encrypted message:", encrypted_message)
+    print("Decrypted message:", decrypted_message)
 
-cipher = Cipher(algorithms.TripleDES(key), modes.ECB(), backend=default_backend())
-
-
-plaintext = b"Sanjay"
-print("plaintext: Sanjay")
-
-padded_plaintext = pad(plaintext)
-
-# encryption 
-
-encryptor = cipher.encryptor()
-
-
-ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
-
-print("Encrypted Text:", ciphertext.hex())
-
-# decryption 
-decryptor = cipher.decryptor()
-
-
-decrypted_padded_text = decryptor.update(ciphertext) + decryptor.finalize()
-
-
-decrypted_plaintext = unpad(decrypted_padded_text)
-
-print("Decrypted Text:", decrypted_plaintext.decode('utf-8'))
+if __name__ == "__main__":
+    main()
 
 
 ```
 ## OUTPUT:
-![image](https://github.com/sanjay3061/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121215929/a0b8bdbf-d93c-454b-8e3e-3b821aaace3f)
+![image](https://github.com/sanjay3061/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121215929/564d3ea8-8459-4eb1-90e8-d6144f1a7c15)
 
 
 ## RESULT :
