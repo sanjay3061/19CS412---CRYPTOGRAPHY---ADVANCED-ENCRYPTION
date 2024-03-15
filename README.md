@@ -45,10 +45,14 @@ def generate_keypair(p, q):
     d = mod_inverse(e, phi)
     return ((e, n), (d, n))
 
+# encryption
+
 def encrypt(public_key, plaintext):
     e, n = public_key
     cipher = [pow(ord(char), e, n) for char in plaintext]
     return cipher
+
+# decryption
 
 def decrypt(private_key, ciphertext):
     d, n = private_key
