@@ -1,6 +1,6 @@
  ## IMPLEMENTATION OF RSA
  # AIM :
- To write a C program to implement the RSA encryption algorithm.
+ To write a python program to implement the RSA encryption algorithm.
 
 ## ALGORITHM:
 STEP-1: Select two co-prime numbers as p and q.
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 
 ## RESULT :
 
-Thus the C program to implement RSA encryption technique had been
+Thus the python program to implement RSA encryption technique had been
 implemented successfully
 
 
@@ -92,7 +92,7 @@ implemented successfully
 
 ## AIM:
 
-To implement the Diffie-Hellman Key Exchange algorithm using C language.
+To implement the Diffie-Hellman Key Exchange algorithm using python language.
 
 
 ## ALGORITHM:
@@ -184,7 +184,7 @@ if __name__ == "__main__":
 ## RESULT: 
 
 Thus the Diffie-Hellman key exchange algorithm had been successfully
-implemented using C.
+implemented using python.
 
 
 
