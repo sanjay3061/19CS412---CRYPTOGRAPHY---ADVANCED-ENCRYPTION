@@ -187,22 +187,60 @@ same process for the remaining plain text characters.
 
 ### PROGRAM :
 
-```
-from cryptography.fernet import Fernet
-message = input()
-key = Fernet.generate_key()
-fernet = Fernet(key)
-encMessage = fernet.encrypt(message.encode())
-print("original string: ", message)
-print("encrypted string: ", encMessage)
+```python
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding
 
-decMessage = fernet.decrypt(encMessage).decode()
- 
-print("decrypted string: ", decMessage)
+
+def pad(text):
+    padder = padding.PKCS7(64).padder()
+    padded_text = padder.update(text)
+    return padded_text + padder.finalize()
+
+
+def unpad(text):
+    unpadder = padding.PKCS7(64).unpadder()
+    unpadded_text = unpadder.update(text)
+    return unpadded_text + unpadder.finalize()
+
+# key
+key = b"abcdefgh"
+
+
+cipher = Cipher(algorithms.TripleDES(key), modes.ECB(), backend=default_backend())
+
+
+plaintext = b"Sanjay"
+print("plaintext: Sanjay")
+
+padded_plaintext = pad(plaintext)
+
+# encryption 
+
+encryptor = cipher.encryptor()
+
+
+ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
+
+print("Encrypted Text:", ciphertext.hex())
+
+# decryption 
+decryptor = cipher.decryptor()
+
+
+decrypted_padded_text = decryptor.update(ciphertext) + decryptor.finalize()
+
+
+decrypted_plaintext = unpad(decrypted_padded_text)
+
+print("Decrypted Text:", decrypted_plaintext.decode('utf-8'))
+
+
 ```
 ## OUTPUT:
+![image](https://github.com/sanjay3061/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121215929/a0b8bdbf-d93c-454b-8e3e-3b821aaace3f)
 
-<img width="756" alt="image" src="https://github.com/AlluguriSrikrishnateja/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/118343892/23e74c08-7cea-4381-b9fe-97e247b17470">
 
 ## RESULT:
 
