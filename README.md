@@ -212,7 +212,7 @@ def main():
 
     cipher = DES.new(key, DES.MODE_ECB)
 
-    plaintext = b"jaisurya"
+    plaintext = b"surya"
     padded_plaintext = pad(plaintext, DES.block_size)
     print("Padded Message [Byte Format] :", padded_plaintext)
     print("Padded Message :", padded_plaintext.decode())
@@ -228,10 +228,12 @@ if __name__ == "__main__":
     main()
 
 
+
+
 ```
 ## OUTPUT:
 
-![Screenshot 2024-03-20 180737](https://github.com/jaisurya143/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121999338/687e8892-dba5-4e62-88d1-11d43f5e5f0d)
+![Screenshot 2024-03-20 181141](https://github.com/jaisurya143/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121999338/fb253718-1283-4e8e-a157-f92ab43f641c)
 
 ## RESULT:
 
