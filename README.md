@@ -200,21 +200,38 @@ same process for the remaining plain text characters.
 ### PROGRAM :
 
 ```
-from cryptography.fernet import Fernet
-message = input()
-key = Fernet.generate_key()
-fernet = Fernet(key)
-encMessage = fernet.encrypt(message.encode())
-print("original string: ", message)
-print("encrypted string: ", encMessage)
+from Crypto.Cipher import DES
+from Crypto.Random import get_random_bytes
+from Crypto.Util.Padding import pad, unpad
 
-decMessage = fernet.decrypt(encMessage).decode()
- 
-print("decrypted string: ", decMessage)
+def main():
+    print("Message Encryption Using DES Algorithm\n")
+
+    key = get_random_bytes(8)
+    print("Secret Key:", key.hex())
+
+    cipher = DES.new(key, DES.MODE_ECB)
+
+    plaintext = b"jaisurya"
+    padded_plaintext = pad(plaintext, DES.block_size)
+    print("Padded Message [Byte Format] :", padded_plaintext)
+    print("Padded Message :", padded_plaintext.decode())
+
+    ciphertext = cipher.encrypt(padded_plaintext)
+    print("Encrypted Message:", ciphertext.hex())
+
+    decrypted_text = cipher.decrypt(ciphertext)
+    unpadded_decrypted_text = unpad(decrypted_text, DES.block_size)
+    print("Decrypted Message:", unpadded_decrypted_text.decode())
+
+if __name__ == "__main__":
+    main()
+
+
 ```
 ## OUTPUT:
 
-<img width="756" alt="image" src="https://github.com/AlluguriSrikrishnateja/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/118343892/23e74c08-7cea-4381-b9fe-97e247b17470">
+![Screenshot 2024-03-20 180737](https://github.com/jaisurya143/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121999338/687e8892-dba5-4e62-88d1-11d43f5e5f0d)
 
 ## RESULT:
 
