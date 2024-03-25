@@ -200,40 +200,59 @@ same process for the remaining plain text characters.
 ### PROGRAM :
 
 ```
-from Crypto.Cipher import DES
-from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import pad, unpad
-
-def main():
-    print("Message Encryption Using DES Algorithm\n")
-
-    key = get_random_bytes(8)
-    print("Secret Key:", key.hex())
-
-    cipher = DES.new(key, DES.MODE_ECB)
-
-    plaintext = b"surya"
-    padded_plaintext = pad(plaintext, DES.block_size)
-    print("Padded Message [Byte Format] :", padded_plaintext)
-    print("Padded Message :", padded_plaintext.decode())
-
-    ciphertext = cipher.encrypt(padded_plaintext)
-    print("Encrypted Message:", ciphertext.hex())
-
-    decrypted_text = cipher.decrypt(ciphertext)
-    unpadded_decrypted_text = unpad(decrypted_text, DES.block_size)
-    print("Decrypted Message:", unpadded_decrypted_text.decode())
-
-if __name__ == "__main__":
-    main()
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import padding
 
 
+def pad(text):
+    padder = padding.PKCS7(64).padder()
+    padded_text = padder.update(text)
+    return padded_text + padder.finalize()
+
+
+def unpad(text):
+    unpadder = padding.PKCS7(64).unpadder()
+    unpadded_text = unpadder.update(text)
+    return unpadded_text + unpadder.finalize()
+
+# key
+key = b"abcdefgh"
+
+
+cipher = Cipher(algorithms.TripleDES(key), modes.ECB(), backend=default_backend())
+
+
+plaintext = b"SURYA"
+print("plaintext: SURYA")
+
+padded_plaintext = pad(plaintext)
+
+# encryption 
+
+encryptor = cipher.encryptor()
+
+
+ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
+
+print("Encrypted Text:", ciphertext.hex())
+
+# decryption 
+decryptor = cipher.decryptor()
+
+
+decrypted_padded_text = decryptor.update(ciphertext) + decryptor.finalize()
+
+
+decrypted_plaintext = unpad(decrypted_padded_text)
+
+print("Decrypted Text:", decrypted_plaintext.decode('utf-8'))
 
 
 ```
 ## OUTPUT:
+![Screenshot 2024-03-25 085418](https://github.com/jaisurya143/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121215929/5cabefe6-7861-4167-a433-e4b880860eef)
 
-![Screenshot 2024-03-20 181141](https://github.com/jaisurya143/19CS412---CRYPTOGRAPHY---ADVANCED-ENCRYPTION/assets/121999338/fb253718-1283-4e8e-a157-f92ab43f641c)
 
 ## RESULT:
 
